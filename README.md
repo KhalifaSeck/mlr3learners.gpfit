@@ -5,9 +5,12 @@
 [![test-coverage](https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/test-coverage.yaml)
 [![codecov](https://codecov.io/github/KhalifaSeck/mlr3learners.gpfit/graph/badge.svg?token=PH1D4HEWA6)](https://codecov.io/github/KhalifaSeck/mlr3learners.gpfit)
 [![pkgdown](https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/pkgdown.yaml)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-BADGE-ID/deploy-status)](https://mlr3learners-gpfit.netlify.app)
 <!-- badges: end -->
 
 Learner de régression par Processus Gaussiens pour [mlr3](https://mlr3.mlr-org.com/) utilisant le package [GPfit](https://CRAN.R-project.org/package=GPfit).
+
+**Note** : Ce package implémente **GPfit** (R pur) au lieu de **GPyTorch** (Python) comme suggéré dans l'[issue #487](https://github.com/mlr-org/mlr3extralearners/issues/487). GPfit a été choisi pour éviter les dépendances Python (reticulate) et fournir une implémentation entièrement en R, plus simple à maintenir et déployer.
 
 ## Documentation
 
@@ -17,7 +20,6 @@ Contient :
 - Documentation complète de toutes les fonctions
 - Guide d'utilisation
 - Exemples de code
-- Vignette avec analyse de benchmark
 
 ## Installation
 
@@ -60,7 +62,7 @@ GPfit a été comparé à 3 autres algorithmes sur 2 jeux de données de régres
 
 **GPfit obtient les meilleures performances sur les deux jeux de données !** 🏆
 
-Voir la [vignette benchmark](https://khalifaseck.github.io/mlr3learners.gpfit/articles/benchmark.html) pour une analyse détaillée.
+L'analyse complète du benchmark est disponible dans le fichier `vignettes/benchmark.Rmd` du package.
 
 ## Développement
 
@@ -70,13 +72,13 @@ Ce package inclut :
 - ✅ **Vignette** avec analyse complète du benchmark
 - ✅ **Intégration continue** via GitHub Actions
 - ✅ **Couverture de code** suivie via Codecov
-- ✅ **Site web de documentation** via pkgdown
+- ✅ **Site web de documentation** déployé sur Netlify
 
 ## Travaux connexes
 
 - **Wiki du cours** : https://github.com/tdhock/2026-01-aa-grande-echelle/wiki/projets
 - **Package GPfit** : https://CRAN.R-project.org/package=GPfit
-- **Issue mlr3extralearners #487** : https://github.com/mlr-org/mlr3extralearners/issues/487
+- **Issue mlr3extralearners #487** : https://github.com/mlr-org/mlr3extralearners/issues/487 (GPyTorch → GPfit)
 - **Livre mlr3** : https://mlr3book.mlr-org.com/
 
 ## Auteur
