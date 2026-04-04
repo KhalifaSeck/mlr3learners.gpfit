@@ -23,9 +23,13 @@ Imports:
 Suggests:
     testthat (>= 3.0.0),
     mlr3learners,
-    ggplot2
+    mlr3tuning,
+    paradox,
+    ggplot2,
+    knitr,
+    rmarkdown
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Config/testthat/edition: 3
-
+Config/testest/edition: 3
+VignetteBuilder: knitr
 
