@@ -27,8 +27,8 @@ remotes::install_github("KhalifaSeck/mlr3learners.gpfit")
 library(mlr3)
 library(mlr3learners.gpfit)
 
-# Créer une tâche de régression
-task = tsk("mtcars")
+# Créer une tâche de régression avec iris
+task = as_task_regr(iris, target = "Sepal.Length", id = "iris_sepal")
 
 # Créer le learner GP
 learner = lrn("regr.gpfit")
@@ -47,7 +47,7 @@ prediction$score(msr("regr.mse"))
 ## Résultats du benchmark
 
 GPfit a été comparé à 3 autres algorithmes sur 2 jeux de données de
-régression :
+régression (validation croisée à 5 folds) :
 
 | Jeu de données | GPfit      | CV-Glmnet | KNN    | Featureless |
 |----------------|------------|-----------|--------|-------------|
