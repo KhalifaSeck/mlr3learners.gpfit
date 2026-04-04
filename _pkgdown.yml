@@ -30,3 +30,6 @@ reference:
     contents:
       - LearnerRegrGPfit
 
+build:
+  rebuild_vignettes: false
+
