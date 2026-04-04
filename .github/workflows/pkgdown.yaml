@@ -25,28 +25,19 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgdown, local::.
+          extra-packages: any::pkgdown
           needs: website
 
-      - name: Build site (without rebuilding vignettes)
+      - name: Build site
         run: |
-          # Copy pre-built vignettes to doc/
-          if [ -d "vignettes" ]; then
-            mkdir -p doc
-            if [ -f "vignettes/benchmark.html" ]; then
-              cp vignettes/benchmark.html doc/
-            fi
-          fi
-          # Build site without rebuilding vignettes
-          pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+          pkgdown::build_site(override = list(new_process = FALSE))
         shell: Rscript {0}
 
-      - name: Deploy to GitHub pages 🚀
-        if: github.event_name != 'pull_request'
+      - name: Deploy to GitHub pages
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
-          clean: false
           branch: gh-pages
           folder: docs
-
+    
+    
 
