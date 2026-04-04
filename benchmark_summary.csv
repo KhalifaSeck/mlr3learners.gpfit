@@ -1,0 +1,9 @@
+task_id,learner_id,mean_mse
+iris_petal,gpfit,0.0695854731588518
+iris_petal,knn,0.107549081567178
+iris_petal,cv_glmnet,0.119362706422324
+iris_petal,featureless,3.10469666666667
+iris_sepal,gpfit,0.10017369614993
+iris_sepal,cv_glmnet,0.110341094593193
+iris_sepal,knn,0.131126188422609
+iris_sepal,featureless,0.684997222222222
