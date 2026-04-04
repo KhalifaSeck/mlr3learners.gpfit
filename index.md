@@ -6,8 +6,7 @@ Learner de régression par Processus Gaussiens pour
 
 ## Documentation
 
-📚 **Site web complet** :
-<https://khalifaseck.github.io/mlr3learners.gpfit/>
+📚 **Site web complet** : <https://mlr3learners-gpfit.netlify.app/>
 
 Contient : - Documentation complète de toutes les fonctions - Guide
 d’utilisation - Exemples de code - Vignette avec analyse de benchmark
