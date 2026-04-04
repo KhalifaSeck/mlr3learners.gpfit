@@ -1,3 +1,5 @@
+
+
 url: https://khalifaseck.github.io/mlr3learners.gpfit/
 
 template:
@@ -6,7 +8,7 @@ template:
 
 navbar:
   structure:
-    left:  [intro, reference, articles]
+    left:  [intro, reference]
     right: [github]
   components:
     home:
@@ -15,21 +17,12 @@ navbar:
     reference:
       text: Reference
       href: reference/index.html
-    articles:
-      text: Articles
-      menu:
-      - text: Benchmark Analysis
-        href: articles/benchmark.html
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/KhalifaSeck/mlr3learners.gpfit
 
 reference:
   - title: "Learner"
-    desc: "Gaussian Process regression learner for mlr3"
     contents:
-      - LearnerRegrGPfit
-
-build:
-  rebuild_vignettes: false
+      - starts_with("Learner")
 
