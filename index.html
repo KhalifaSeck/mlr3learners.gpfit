@@ -48,11 +48,12 @@
 <!-- badges: start -->
 
 <p>Learner de régression par Processus Gaussiens pour <a href="https://mlr3.mlr-org.com/" class="external-link">mlr3</a> utilisant le package <a href="https://CRAN.R-project.org/package=GPfit" class="external-link">GPfit</a>.</p>
+<p><strong>Note</strong> : Ce package implémente <strong>GPfit</strong> (R pur) au lieu de <strong>GPyTorch</strong> (Python) comme suggéré dans l’<a href="https://github.com/mlr-org/mlr3extralearners/issues/487" class="external-link">issue #487</a>. GPfit a été choisi pour éviter les dépendances Python (reticulate) et fournir une implémentation entièrement en R, plus simple à maintenir et déployer.</p>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
 <p>📚 <strong>Site web complet</strong> : <a href="https://mlr3learners-gpfit.netlify.app/" class="uri">https://mlr3learners-gpfit.netlify.app/</a></p>
-<p>Contient : - Documentation complète de toutes les fonctions - Guide d’utilisation - Exemples de code - Vignette avec analyse de benchmark</p>
+<p>Contient : - Documentation complète de toutes les fonctions - Guide d’utilisation - Exemples de code</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -115,7 +116,7 @@
 </tbody>
 </table>
 <p><strong>GPfit obtient les meilleures performances sur les deux jeux de données !</strong> 🏆</p>
-<p>Voir la <a href="https://khalifaseck.github.io/mlr3learners.gpfit/articles/benchmark.html" class="external-link">vignette benchmark</a> pour une analyse détaillée.</p>
+<p>L’analyse complète du benchmark est disponible dans le fichier <code>vignettes/benchmark.Rmd</code> du package.</p>
 </div>
 <div class="section level2">
 <h2 id="développement">Développement<a class="anchor" aria-label="anchor" href="#d%C3%A9veloppement"></a>
@@ -126,7 +127,7 @@
 <li>✅ <strong>Vignette</strong> avec analyse complète du benchmark</li>
 <li>✅ <strong>Intégration continue</strong> via GitHub Actions</li>
 <li>✅ <strong>Couverture de code</strong> suivie via Codecov</li>
-<li>✅ <strong>Site web de documentation</strong> via pkgdown</li>
+<li>✅ <strong>Site web de documentation</strong> déployé sur Netlify</li>
 </ul>
 </div>
 <div class="section level2">
@@ -140,8 +141,7 @@
 <strong>Package GPfit</strong> : <a href="https://CRAN.R-project.org/package=GPfit" class="external-link uri">https://CRAN.R-project.org/package=GPfit</a>
 </li>
 <li>
-<strong>Issue mlr3extralearners #487</strong> : <a href="https://github.com/mlr-org/mlr3extralearners/issues/487" class="external-link uri">https://github.com/mlr-org/mlr3extralearners/issues/487</a>
-</li>
+<strong>Issue mlr3extralearners #487</strong> : <a href="https://github.com/mlr-org/mlr3extralearners/issues/487" class="external-link uri">https://github.com/mlr-org/mlr3extralearners/issues/487</a> (GPyTorch → GPfit)</li>
 <li>
 <strong>Livre mlr3</strong> : <a href="https://mlr3book.mlr-org.com/" class="external-link uri">https://mlr3book.mlr-org.com/</a>
 </li>
@@ -196,6 +196,7 @@
 <li><a href="https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/test-coverage.yaml" class="external-link"><img src="https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/test-coverage.yaml/badge.svg" alt="test-coverage"></a></li>
 <li><a href="https://codecov.io/github/KhalifaSeck/mlr3learners.gpfit" class="external-link"><img src="https://codecov.io/github/KhalifaSeck/mlr3learners.gpfit/graph/badge.svg?token=PH1D4HEWA6" alt="codecov"></a></li>
 <li><a href="https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a></li>
+<li><a href="https://mlr3learners-gpfit.netlify.app"><img src="https://api.netlify.com/api/v1/badges/YOUR-BADGE-ID/deploy-status" alt="Netlify Status"></a></li>
 </ul>
 </div>
 
