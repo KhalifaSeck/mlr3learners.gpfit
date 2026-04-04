@@ -1,5 +1,4 @@
-url: https://khalifaseck.github.io/mlr3learners.gpfit/
-
+url: https://mlr3learners-gpfit.netlify.app/
 template:
   bootstrap: 5
   bootswatch: flatly
