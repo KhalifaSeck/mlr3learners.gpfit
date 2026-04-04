@@ -47,52 +47,115 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>Gaussian Process regression learner for <a href="https://mlr3.mlr-org.com/" class="external-link">mlr3</a> using the <a href="https://CRAN.R-project.org/package=GPfit" class="external-link">GPfit</a> package.</p>
+<p>Learner de régression par Processus Gaussiens pour <a href="https://mlr3.mlr-org.com/" class="external-link">mlr3</a> utilisant le package <a href="https://CRAN.R-project.org/package=GPfit" class="external-link">GPfit</a>.</p>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<p>📚 <strong>Site web complet</strong> : <a href="https://khalifaseck.github.io/mlr3learners.gpfit/" class="uri">https://khalifaseck.github.io/mlr3learners.gpfit/</a></p>
+<p>Contient : - Documentation complète de toutes les fonctions - Guide d’utilisation - Exemples de code - Vignette avec analyse de benchmark</p>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Install from GitHub:</p>
+<p>Installation depuis GitHub :</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"KhalifaSeck/mlr3learners.gpfit"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+<h2 id="utilisation">Utilisation<a class="anchor" aria-label="anchor" href="#utilisation"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/KhalifaSeck/mlr3learners.gpfit" class="external-link">mlr3learners.gpfit</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Create a regression task</span></span>
+<span><span class="co"># Créer une tâche de régression</span></span>
 <span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">tsk</a></span><span class="op">(</span><span class="st">"mtcars"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Create the GP learner</span></span>
+<span><span class="co"># Créer le learner GP</span></span>
 <span><span class="va">learner</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.gpfit"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Train the model</span></span>
+<span><span class="co"># Entraîner le modèle</span></span>
 <span><span class="va">learner</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Make predictions</span></span>
+<span><span class="co"># Faire des prédictions</span></span>
 <span><span class="va">prediction</span> <span class="op">=</span> <span class="va">learner</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">prediction</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Evaluate performance</span></span>
+<span><span class="co"># Évaluer la performance</span></span>
 <span><span class="va">prediction</span><span class="op">$</span><span class="fu">score</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">msr</a></span><span class="op">(</span><span class="st">"regr.mse"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="related-work">Related work<a class="anchor" aria-label="anchor" href="#related-work"></a>
+<h2 id="résultats-du-benchmark">Résultats du benchmark<a class="anchor" aria-label="anchor" href="#r%C3%A9sultats-du-benchmark"></a>
+</h2>
+<p>GPfit a été comparé à 3 autres algorithmes sur 2 jeux de données de régression :</p>
+<table class="table">
+<thead><tr class="header">
+<th>Jeu de données</th>
+<th>GPfit</th>
+<th>CV-Glmnet</th>
+<th>KNN</th>
+<th>Featureless</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>iris_sepal</td>
+<td><strong>0.1002</strong></td>
+<td>0.1103</td>
+<td>0.1311</td>
+<td>0.6850</td>
+</tr>
+<tr class="even">
+<td>iris_petal</td>
+<td><strong>0.0696</strong></td>
+<td>0.1194</td>
+<td>0.1075</td>
+<td>3.1047</td>
+</tr>
+</tbody>
+</table>
+<p><strong>GPfit obtient les meilleures performances sur les deux jeux de données !</strong> 🏆</p>
+<p>Voir la <a href="https://khalifaseck.github.io/mlr3learners.gpfit/articles/benchmark.html">vignette benchmark</a> pour une analyse détaillée.</p>
+</div>
+<div class="section level2">
+<h2 id="développement">Développement<a class="anchor" aria-label="anchor" href="#d%C3%A9veloppement"></a>
+</h2>
+<p>Ce package inclut :</p>
+<ul>
+<li>✅ <strong>7 tests unitaires</strong> (100% réussis)</li>
+<li>✅ <strong>Vignette</strong> avec analyse complète du benchmark</li>
+<li>✅ <strong>Intégration continue</strong> via GitHub Actions</li>
+<li>✅ <strong>Couverture de code</strong> suivie via Codecov</li>
+<li>✅ <strong>Site web de documentation</strong> via pkgdown</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="travaux-connexes">Travaux connexes<a class="anchor" aria-label="anchor" href="#travaux-connexes"></a>
 </h2>
 <ul>
 <li>
-<strong>Course wiki</strong>: <a href="https://github.com/tdhock/2026-01-aa-grande-echelle/wiki/projets" class="external-link uri">https://github.com/tdhock/2026-01-aa-grande-echelle/wiki/projets</a>
+<strong>Wiki du cours</strong> : <a href="https://github.com/tdhock/2026-01-aa-grande-echelle/wiki/projets" class="external-link uri">https://github.com/tdhock/2026-01-aa-grande-echelle/wiki/projets</a>
 </li>
 <li>
-<strong>GPfit package</strong>: <a href="https://CRAN.R-project.org/package=GPfit" class="external-link uri">https://CRAN.R-project.org/package=GPfit</a>
+<strong>Package GPfit</strong> : <a href="https://CRAN.R-project.org/package=GPfit" class="external-link uri">https://CRAN.R-project.org/package=GPfit</a>
 </li>
 <li>
-<strong>mlr3extralearners issue #487</strong>: <a href="https://github.com/mlr-org/mlr3extralearners/issues/487" class="external-link uri">https://github.com/mlr-org/mlr3extralearners/issues/487</a>
+<strong>Issue mlr3extralearners #487</strong> : <a href="https://github.com/mlr-org/mlr3extralearners/issues/487" class="external-link uri">https://github.com/mlr-org/mlr3extralearners/issues/487</a>
+</li>
+<li>
+<strong>Livre mlr3</strong> : <a href="https://mlr3book.mlr-org.com/" class="external-link uri">https://mlr3book.mlr-org.com/</a>
 </li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="auteur">Auteur<a class="anchor" aria-label="anchor" href="#auteur"></a>
+</h2>
+<p><strong>Khalifa SECK</strong> - <a href="https://github.com/KhalifaSeck" class="external-link">GitHub</a></p>
+</div>
+<div class="section level2">
+<h2 id="licence">Licence<a class="anchor" aria-label="anchor" href="#licence"></a>
+</h2>
+<p>MIT License</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -129,7 +192,10 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/KhalifaSeck/mlr3learners.gpfit/actions" class="external-link"><img src="https://github.com/KhalifaSeck/mlr3learners.gpfit/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/check.yaml" class="external-link"><img src="https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/test-coverage.yaml" class="external-link"><img src="https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/test-coverage.yaml/badge.svg" alt="test-coverage"></a></li>
+<li><a href="https://codecov.io/github/KhalifaSeck/mlr3learners.gpfit" class="external-link"><img src="https://codecov.io/github/KhalifaSeck/mlr3learners.gpfit/graph/badge.svg?token=PH1D4HEWA6" alt="codecov"></a></li>
+<li><a href="https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a></li>
 </ul>
 </div>
 
