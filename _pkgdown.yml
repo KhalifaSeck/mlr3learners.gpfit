@@ -1,3 +1,4 @@
+
 url: https://mlr3learners-gpfit.netlify.app/
 
 template:
@@ -10,9 +11,12 @@ navbar:
     right: []
 
 reference:
+- title: Package
+  contents:
+  - mlr3learners.gpfit-package
+
 - title: Learners
   contents:
-  - starts_with("Learner")
-
-articles: []
+  - LearnerRegrGPfit
+  - mlr_learners_regr.gpfit
 
