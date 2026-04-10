@@ -1,3 +1,4 @@
+
 # History files
 .Rhistory
 .Rapp.history
@@ -49,4 +50,3 @@ po/*~
 rsconnect/
 .Rproj.user
 inst/doc
-docs
