@@ -1,21 +1,21 @@
 url: https://mlr3learners-gpfit.netlify.app/
+
 template:
   bootstrap: 5
   bootswatch: flatly
 
 navbar:
   structure:
-    left:  [intro, reference]
-    right: [github]
-  components:
-    home:
-      icon: fas fa-home fa-lg
-      href: index.html
-    reference:
-      text: Reference
-      href: reference/index.html
-    github:
-      icon: fab fa-github fa-lg
-      href: https://github.com/KhalifaSeck/mlr3learners.gpfit
+    left:  [home, reference, github]
+    right: []
 
+reference:
+- title: Learners
+  contents:
+  - starts_with("Learner")
 
+development:
+  mode: auto
+  
+# DÉSACTIVER LA VIGNETTE
+articles: []
