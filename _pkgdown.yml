@@ -6,7 +6,7 @@ template:
 
 navbar:
   structure:
-    left:  [home, reference, github]
+    left: [home, reference, github]
     right: []
 
 reference:
@@ -14,8 +14,5 @@ reference:
   contents:
   - starts_with("Learner")
 
-development:
-  mode: auto
-  
-# DÉSACTIVER LA VIGNETTE
 articles: []
+
