@@ -46,22 +46,49 @@ LearnerRegrGPfit = R6::R6Class("LearnerRegrGPfit",
   ),
   
   private = list(
+    # Stockage des paramètres de normalisation
+    .x_min = NULL,
+    .x_max = NULL,
+    
     .train = function(task) {
       # Get training data
       data = task$data()
       X = as.matrix(data[, task$feature_names, with = FALSE])
       Y = data[[task$target_names]]
       
+      # Normaliser X vers [0,1] (requis par GPfit)
+      private$.x_min = apply(X, 2, min)
+      private$.x_max = apply(X, 2, max)
+      
+      X_scaled = sweep(X, 2, private$.x_min, "-")
+      X_scaled = sweep(X_scaled, 2, private$.x_max - private$.x_min, "/")
+      
+      # Gérer les features constantes
+      constant_features = private$.x_max == private$.x_min
+      if (any(constant_features)) {
+        X_scaled[, constant_features] = 0.5
+      }
+      
       # Train GP model using GPfit::GP_fit()
-      GPfit::GP_fit(X = X, Y = Y)
+      GPfit::GP_fit(X = X_scaled, Y = Y)
     },
     
     .predict = function(task) {
       # Get test data
       newdata = as.matrix(task$data(cols = task$feature_names))
       
+      # Normaliser avec les paramètres de train
+      newdata_scaled = sweep(newdata, 2, private$.x_min, "-")
+      newdata_scaled = sweep(newdata_scaled, 2, private$.x_max - private$.x_min, "/")
+      
+      # Gérer les features constantes
+      constant_features = private$.x_max == private$.x_min
+      if (any(constant_features)) {
+        newdata_scaled[, constant_features] = 0.5
+      }
+      
       # Make predictions using predict()
-      pred = predict(object = self$model, xnew = newdata)
+      pred = predict(object = self$model, xnew = newdata_scaled)
       
       # Return mlr3 PredictionRegr object
       mlr3::PredictionRegr$new(
@@ -71,3 +98,4 @@ LearnerRegrGPfit = R6::R6Class("LearnerRegrGPfit",
     }
   )
 )
+

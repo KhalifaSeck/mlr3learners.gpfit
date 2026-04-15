@@ -12,14 +12,12 @@ test_that("LearnerRegrGPfit train and predict work", {
   
   # Entraînement du modèle
   suppressWarnings(learner$train(task))
-
-  
   
   # Vérification que le modèle a été entraîné et est de la classe attendue
   expect_true(!is.null(learner$model))
   expect_s3_class(learner$model, "GP")
   
-  # PredictION
+  # Prediction
   prediction = learner$predict(task)
   
   # Vérification des prédictions
