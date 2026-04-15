@@ -79,7 +79,6 @@ learner = lrn("regr.gpfit")
 
 # Train the model
 learner$train(task)
-#> Warning: X should be in range (0, 1)
 
 # Make predictions
 prediction = learner$predict(task)
