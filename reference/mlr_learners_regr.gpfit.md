@@ -2,7 +2,19 @@
 
 Gaussian Process regression using the GPfit package. Calls
 [`GPfit::GP_fit()`](https://rdrr.io/pkg/GPfit/man/GP_fit.html) for
-training and predict method for predictions.
+training and predict method for predictions. Features are automatically
+scaled to the unit hypercube as required by GPfit.
+
+## Parameters
+
+- `corr_type` (`character(1)`)  
+  Correlation function type: "exponential" (default) or "matern".
+
+- `corr_power` (`numeric(1)`)  
+  Power parameter for exponential correlation. Default: 1.95.
+
+- `corr_nu` (`numeric(1)`)  
+  Smoothness parameter for Matern correlation. Default: 2.5.
 
 ## References
 
@@ -74,15 +86,10 @@ library(mlr3)
 # Create a regression task
 task = tsk("mtcars")
 
-# Create the learner
+# Create the learner with default parameters
 learner = lrn("regr.gpfit")
-
-# Train the model
 learner$train(task)
-
-# Make predictions
-prediction = learner$predict(task)
-print(prediction)
+learner$predict(task)
 #> 
 #> ── <PredictionRegr> for 32 observations: ───────────────────────────────────────
 #>  row_ids truth response
@@ -93,4 +100,9 @@ print(prediction)
 #>       30  19.7     19.7
 #>       31  15.0     15.0
 #>       32  21.4     21.4
+
+# Use Matern correlation
+learner2 = lrn("regr.gpfit")
+learner2$param_set$values = list(corr_type = "matern", corr_nu = 1.5)
+learner2$train(task)
 ```
