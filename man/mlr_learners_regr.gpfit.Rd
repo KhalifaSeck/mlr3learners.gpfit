@@ -7,22 +7,35 @@
 \description{
 Gaussian Process regression using the GPfit package.
 Calls \code{\link[GPfit:GP_fit]{GPfit::GP_fit()}} for training and predict method for predictions.
+Features are automatically scaled to the unit hypercube as required by GPfit.
 }
+\section{Parameters}{
+
+\itemize{
+\item \code{corr_type} (\code{character(1)})\cr
+Correlation function type: "exponential" (default) or "matern".
+\item \code{corr_power} (\code{numeric(1)})\cr
+Power parameter for exponential correlation. Default: 1.95.
+\item \code{corr_nu} (\code{numeric(1)})\cr
+Smoothness parameter for Matern correlation. Default: 2.5.
+}
+}
+
 \examples{
 library(mlr3)
 
 # Create a regression task
 task = tsk("mtcars")
 
-# Create the learner
+# Create the learner with default parameters
 learner = lrn("regr.gpfit")
-
-# Train the model
 learner$train(task)
+learner$predict(task)
 
-# Make predictions
-prediction = learner$predict(task)
-print(prediction)
+# Use Matern correlation
+learner2 = lrn("regr.gpfit")
+learner2$param_set$values = list(corr_type = "matern", corr_nu = 1.5)
+learner2$train(task)
 }
 \references{
 MacDonald, B., Ranjan, P., Chipman, H. (2015).
