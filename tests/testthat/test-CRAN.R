@@ -44,7 +44,7 @@ test_that("LearnerRegrGPfit hyperparameters work with exponential", {
   task = tsk("mtcars")
   learner = lrn("regr.gpfit")
   
-  # Test avec exponential et power personnalisé
+  # Test with exponential and custom power
   learner$param_set$values = list(corr_type = "exponential", corr_power = 1.9)
   suppressWarnings(learner$train(task))
   prediction = learner$predict(task)
@@ -61,7 +61,7 @@ test_that("LearnerRegrGPfit hyperparameters work with matern", {
   task = tsk("mtcars")
   learner = lrn("regr.gpfit")
   
-  # Test avec Matérn
+  # Test with Matern 
   learner$param_set$values = list(corr_type = "matern", corr_nu = 1.5)
   suppressWarnings(learner$train(task))
   prediction = learner$predict(task)
@@ -72,4 +72,124 @@ test_that("LearnerRegrGPfit hyperparameters work with matern", {
   expect_true(all(!is.na(prediction$response)))
 })
 
+# Quality test 
+
+test_that("LearnerRegrGPfit prediction quality on iris_sepal with default params", {
+  skip_if_not_installed("GPfit")
+  
+  # Create task
+  iris_numeric = iris[, c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")]
+  task = as_task_regr(iris_numeric, target = "Sepal.Length", id = "iris_sepal")
+  learner = lrn("regr.gpfit")
+  
+  # Split train/test (70/30)
+  set.seed(123)
+  train_idx = sample(1:task$nrow, 0.7 * task$nrow)
+  test_idx = setdiff(1:task$nrow, train_idx)
+  
+  # Train
+  suppressWarnings(learner$train(task, row_ids = train_idx))
+  
+  # Predict on train et test
+  pred_train = learner$predict(task, row_ids = train_idx)
+  mse_train = pred_train$score(msr("regr.mse"))
+  
+  pred_test = learner$predict(task, row_ids = test_idx)
+  mse_test = pred_test$score(msr("regr.mse"))
+  
+  # Compare with baseline
+  learner_baseline = lrn("regr.featureless")
+  learner_baseline$train(task, row_ids = train_idx)
+  pred_baseline = learner_baseline$predict(task, row_ids = test_idx)
+  mse_baseline = pred_baseline$score(msr("regr.mse"))
+  
+  # Verifications
+  expect_true(mse_train < mse_test)  
+  expect_true(mse_test < mse_baseline) 
+  improvement = (mse_baseline - mse_test) / mse_baseline * 100
+  expect_true(improvement > 50)  
+})
+
+test_that("LearnerRegrGPfit prediction quality on iris_sepal with Matern", {
+  skip_if_not_installed("GPfit")
+  
+  iris_numeric = iris[, c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")]
+  task = as_task_regr(iris_numeric, target = "Sepal.Length", id = "iris_sepal")
+  learner = lrn("regr.gpfit")
+  learner$param_set$values = list(corr_type = "matern", corr_nu = 1.5)
+  
+  set.seed(123)
+  train_idx = sample(1:task$nrow, 0.7 * task$nrow)
+  test_idx = setdiff(1:task$nrow, train_idx)
+  
+  suppressWarnings(learner$train(task, row_ids = train_idx))
+  pred_test = learner$predict(task, row_ids = test_idx)
+  mse_test = pred_test$score(msr("regr.mse"))
+  
+  learner_baseline = lrn("regr.featureless")
+  learner_baseline$train(task, row_ids = train_idx)
+  pred_baseline = learner_baseline$predict(task, row_ids = test_idx)
+  mse_baseline = pred_baseline$score(msr("regr.mse"))
+  
+  expect_true(mse_test < mse_baseline)
+  expect_true(mse_test < 0.2)
+})
+
+test_that("LearnerRegrGPfit prediction quality on iris_petal with default params", {
+  skip_if_not_installed("GPfit")
+  
+  iris_numeric = iris[, c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")]
+  task = as_task_regr(iris_numeric, target = "Petal.Length", id = "iris_petal")
+  learner = lrn("regr.gpfit")
+  
+  set.seed(456)
+  train_idx = sample(1:task$nrow, 0.7 * task$nrow)
+  test_idx = setdiff(1:task$nrow, train_idx)
+  
+  suppressWarnings(learner$train(task, row_ids = train_idx))
+  
+  # Scores train et test
+  pred_train = learner$predict(task, row_ids = train_idx)
+  mse_train = pred_train$score(msr("regr.mse"))
+  
+  pred_test = learner$predict(task, row_ids = test_idx)
+  mse_test = pred_test$score(msr("regr.mse"))
+  
+  # Baseline
+  learner_baseline = lrn("regr.featureless")
+  learner_baseline$train(task, row_ids = train_idx)
+  pred_baseline = learner_baseline$predict(task, row_ids = test_idx)
+  mse_baseline = pred_baseline$score(msr("regr.mse"))
+  
+  # Verifications
+  expect_true(mse_train < mse_test)  
+  expect_true(mse_test < mse_baseline)  
+  improvement = (mse_baseline - mse_test) / mse_baseline * 100
+  expect_true(improvement > 50)
+})
+
+test_that("LearnerRegrGPfit prediction quality on iris_petal with custom power", {
+  skip_if_not_installed("GPfit")
+  
+  iris_numeric = iris[, c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")]
+  task = as_task_regr(iris_numeric, target = "Petal.Length", id = "iris_petal")
+  learner = lrn("regr.gpfit")
+  learner$param_set$values = list(corr_type = "exponential", corr_power = 1.8)
+  
+  set.seed(456)
+  train_idx = sample(1:task$nrow, 0.7 * task$nrow)
+  test_idx = setdiff(1:task$nrow, train_idx)
+  
+  suppressWarnings(learner$train(task, row_ids = train_idx))
+  pred_test = learner$predict(task, row_ids = test_idx)
+  mse_test = pred_test$score(msr("regr.mse"))
+  
+  learner_baseline = lrn("regr.featureless")
+  learner_baseline$train(task, row_ids = train_idx)
+  pred_baseline = learner_baseline$predict(task, row_ids = test_idx)
+  mse_baseline = pred_baseline$score(msr("regr.mse"))
+  
+  expect_true(mse_test < mse_baseline)
+  expect_true(mse_test < 0.5)
+})
 
