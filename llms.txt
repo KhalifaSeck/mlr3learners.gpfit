@@ -90,13 +90,13 @@ represent the best learner for each task.
 improvement over baseline - **iris_petal**: 97.76% improvement over
 baseline
 
-✅ **YES, GPfit learns non-trivial patterns**
+**YES, GPfit learns non-trivial patterns**
 
 **Is GPfit competitive with other algorithms?** - **iris_sepal**: GPfit
 ranks **\#1 out of 4** algorithms - **iris_petal**: GPfit ranks **\#1
 out of 4** algorithms
 
-✅ **GPfit achieves the best performance on both datasets**
+**GPfit achieves the best performance on both datasets**
 
 The complete benchmark analysis is available in the `benchmark.R` file.
 
