@@ -46,147 +46,71 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>Learner de régression par Processus Gaussiens pour <a href="https://mlr3.mlr-org.com/" class="external-link">mlr3</a> utilisant le package <a href="https://CRAN.R-project.org/package=GPfit" class="external-link">GPfit</a>.</p>
-<p><strong>Note</strong> : Ce package implémente <strong>GPfit</strong> (R pur) au lieu de <strong>GPyTorch</strong> (Python) comme suggéré dans l’<a href="https://github.com/mlr-org/mlr3extralearners/issues/487" class="external-link">issue #487</a>. GPfit a été choisi pour éviter les dépendances Python (reticulate) et fournir une implémentation entièrement en R, plus simple à maintenir et déployer.</p>
+<p>This R package provides an interface to the <a href="https://CRAN.R-project.org/package=GPfit" class="external-link">GPfit</a> package for the <a href="https://mlr3.mlr-org.com/" class="external-link">mlr3</a> ecosystem. It implements Gaussian Process regression with automatic feature scaling and tunable hyperparameters.</p>
+<p><strong>Note</strong>: This package implements <strong>GPfit</strong> (pure R) instead of <strong>GPyTorch</strong> (Python) as suggested in <a href="https://github.com/mlr-org/mlr3extralearners/issues/487" class="external-link">issue #487</a>. GPfit was chosen to avoid Python dependencies (reticulate) and provide a pure R implementation that is easier to maintain and deploy.</p>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
-<p>📚 <strong>Site web complet</strong> : <a href="https://mlr3learners-gpfit.netlify.app/" class="uri">https://mlr3learners-gpfit.netlify.app/</a></p>
-<p>Contient : - Documentation complète de toutes les fonctions - Guide d’utilisation - Exemples de code</p>
+<p>The site can be found at: <strong><a href="https://mlr3learners-gpfit.netlify.app/" class="uri">https://mlr3learners-gpfit.netlify.app/</a></strong></p>
+<p>This site includes API references, usage guides and detailed performance benchmarks.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Installation depuis GitHub :</p>
+<p>To install it, you can use this command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"KhalifaSeck/mlr3learners.gpfit"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="utilisation">Utilisation<a class="anchor" aria-label="anchor" href="#utilisation"></a>
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
+<p>This package provides the <code>regr.gpfit</code> learner for mlr3. Features are automatically scaled to [0,1] as required by GPfit.</p>
+<div class="section level3">
+<h3 id="basic-example">Basic example<a class="anchor" aria-label="anchor" href="#basic-example"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/KhalifaSeck/mlr3learners.gpfit" class="external-link">mlr3learners.gpfit</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Créer une tâche de régression avec iris (sans la colonne Species)</span></span>
+<span><span class="co"># Create regression task (exclude factor columns)</span></span>
 <span><span class="va">iris_numeric</span> <span class="op">=</span> <span class="va">iris</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Sepal.Width"</span>, <span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="va">task</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/as_task_regr.html" class="external-link">as_task_regr</a></span><span class="op">(</span><span class="va">iris_numeric</span>, target <span class="op">=</span> <span class="st">"Sepal.Length"</span>, id <span class="op">=</span> <span class="st">"iris_sepal"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Créer le learner GP</span></span>
+<span><span class="co"># Create and train learner</span></span>
 <span><span class="va">learner</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.gpfit"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Entraîner le modèle</span></span>
 <span><span class="va">learner</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Faire des prédictions</span></span>
+<span><span class="co"># Make predictions</span></span>
 <span><span class="va">prediction</span> <span class="op">=</span> <span class="va">learner</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">prediction</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Évaluer la performance</span></span>
 <span><span class="va">prediction</span><span class="op">$</span><span class="fu">score</span><span class="op">(</span><span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">msr</a></span><span class="op">(</span><span class="st">"regr.mse"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level3">
-<h3 id="hyperparamètres-tunables">Hyperparamètres tunables<a class="anchor" aria-label="anchor" href="#hyperparam%C3%A8tres-tunables"></a>
+<h3 id="tunable-hyperparameters">Tunable hyperparameters<a class="anchor" aria-label="anchor" href="#tunable-hyperparameters"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Corrélation Matérn avec smoothness personnalisé</span></span>
+<code class="sourceCode R"><span><span class="co"># Matérn correlation with custom smoothness</span></span>
 <span><span class="va">learner</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.gpfit"</span><span class="op">)</span></span>
 <span><span class="va">learner</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>corr_type <span class="op">=</span> <span class="st">"matern"</span>, corr_nu <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
 <span><span class="va">learner</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Corrélation exponentielle avec power personnalisé</span></span>
+<span><span class="co"># Exponential correlation with custom power</span></span>
 <span><span class="va">learner</span> <span class="op">=</span> <span class="fu"><a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html" class="external-link">lrn</a></span><span class="op">(</span><span class="st">"regr.gpfit"</span><span class="op">)</span></span>
 <span><span class="va">learner</span><span class="op">$</span><span class="va">param_set</span><span class="op">$</span><span class="va">values</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>corr_type <span class="op">=</span> <span class="st">"exponential"</span>, corr_power <span class="op">=</span> <span class="fl">1.8</span><span class="op">)</span></span>
 <span><span class="va">learner</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">task</span><span class="op">)</span></span></code></pre></div>
-<p><strong>Hyperparamètres disponibles :</strong> - <code>corr_type</code>: Type de fonction de corrélation (“exponential” ou “matern”) - <code>corr_power</code>: Paramètre de puissance pour corrélation exponentielle (défaut: 1.95) - <code>corr_nu</code>: Paramètre de lissage pour corrélation Matérn (défaut: 2.5)</p>
+<p><strong>Available hyperparameters:</strong> - <code>corr_type</code>: Correlation function type (“exponential” or “matern”) - <code>corr_power</code>: Power parameter for exponential correlation (default: 1.95) - <code>corr_nu</code>: Smoothness parameter for Matérn correlation (default: 2.5)</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="validation-de-la-qualité-des-prédictions">Validation de la qualité des prédictions<a class="anchor" aria-label="anchor" href="#validation-de-la-qualit%C3%A9-des-pr%C3%A9dictions"></a>
+<h2 id="benchmark-results">Benchmark results<a class="anchor" aria-label="anchor" href="#benchmark-results"></a>
 </h2>
-<p>La normalisation automatique des features (vers [0,1]) est correctement appliquée en train ET en predict.</p>
-<div class="section level3">
-<h3 id="résultats-sur-iris_sepal-70-train--30-test">Résultats sur iris_sepal (70% train / 30% test)<a class="anchor" aria-label="anchor" href="#r%C3%A9sultats-sur-iris_sepal-70-train--30-test"></a>
-</h3>
+<p>Performance was evaluated using Mean Squared Error (MSE). Results are based on 5-fold cross-validation.</p>
 <table class="table">
 <thead><tr class="header">
-<th>Configuration</th>
-<th>MSE Train</th>
-<th>MSE Test</th>
-<th>Amélioration vs Baseline</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>Default (exponential, power=1.95)</td>
-<td>0.0886</td>
-<td>0.0902</td>
-<td><strong>82.2%</strong></td>
-</tr>
-<tr class="even">
-<td>Matern (nu=1.5)</td>
-<td>0.0940</td>
-<td>0.0860</td>
-<td><strong>83.0%</strong></td>
-</tr>
-<tr class="odd">
-<td>Baseline (featureless)</td>
-<td>0.7564</td>
-<td>0.5056</td>
-<td>-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level3">
-<h3 id="résultats-sur-iris_petal-70-train--30-test">Résultats sur iris_petal (70% train / 30% test)<a class="anchor" aria-label="anchor" href="#r%C3%A9sultats-sur-iris_petal-70-train--30-test"></a>
-</h3>
-<table class="table">
-<thead><tr class="header">
-<th>Configuration</th>
-<th>MSE Train</th>
-<th>MSE Test</th>
-<th>Amélioration vs Baseline</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>Default (exponential, power=1.95)</td>
-<td>0.0533</td>
-<td>0.0826</td>
-<td><strong>97.8%</strong></td>
-</tr>
-<tr class="even">
-<td>Matern (nu=1.5)</td>
-<td>0.0574</td>
-<td>0.0846</td>
-<td><strong>97.8%</strong></td>
-</tr>
-<tr class="odd">
-<td>Exponential (power=1.8)</td>
-<td>0.0504</td>
-<td>0.0819</td>
-<td><strong>97.8%</strong></td>
-</tr>
-<tr class="even">
-<td>Baseline (featureless)</td>
-<td>2.7962</td>
-<td>3.7950</td>
-<td>-</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Observations :</strong> - MSE Train &lt; MSE Test → Normalisation correcte (pas d’overfitting) - MSE Test &lt;&lt; MSE Baseline → Excellente généralisation - Amélioration &gt; 80% sur les deux datasets - Les hyperparamètres permettent d’ajuster finement les performances</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="résultats-du-benchmark">Résultats du benchmark<a class="anchor" aria-label="anchor" href="#r%C3%A9sultats-du-benchmark"></a>
-</h2>
-<p>GPfit a été comparé à 3 autres algorithmes sur 2 jeux de données de régression (validation croisée à 5 folds) :</p>
-<table class="table">
-<thead><tr class="header">
-<th>Jeu de données</th>
+<th>Dataset</th>
 <th>GPfit</th>
 <th>CV-Glmnet</th>
-<th>KNN</th>
+<th>KNN (Tuned)</th>
 <th>Featureless</th>
 </tr></thead>
 <tbody>
@@ -206,83 +130,144 @@
 </tr>
 </tbody>
 </table>
-<p><strong>GPfit obtient les meilleures performances sur les deux jeux de données !</strong></p>
+<p><strong>Note</strong>: Lower values indicate better performance. <strong>Bold values</strong> represent the best learner for each task.</p>
 <div class="section level3">
-<h3 id="analyse-détaillée">Analyse détaillée<a class="anchor" aria-label="anchor" href="#analyse-d%C3%A9taill%C3%A9e"></a>
+<h3 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
 </h3>
-<p><strong>QUESTION 1 : Est-ce que GPfit apprend quelque chose de non-trivial ?</strong></p>
-<ul>
-<li>
-<strong>iris_sepal</strong> : Amélioration de <strong>85.38%</strong> par rapport au baseline</li>
-<li>
-<strong>iris_petal</strong> : Amélioration de <strong>97.76%</strong> par rapport au baseline</li>
-</ul>
-<p><strong>OUI, GPfit apprend des patterns non-triviaux</strong></p>
-<p><strong>QUESTION 2 : GPfit est-il aussi bon que les autres algorithmes ?</strong></p>
-<ul>
-<li>
-<strong>iris_sepal</strong> : GPfit se classe <strong>#1 sur 4</strong> algorithmes</li>
-<li>
-<strong>iris_petal</strong> : GPfit se classe <strong>#1 sur 4</strong> algorithmes</li>
-</ul>
-<p><strong>GPfit est le MEILLEUR sur les deux datasets !</strong></p>
-<p>L’analyse complète du benchmark est disponible dans le fichier <code>benchmark.R</code> du package.</p>
+<p><strong>Does GPfit learn non-trivial patterns?</strong> - <strong>iris_sepal</strong>: 85.38% improvement over baseline - <strong>iris_petal</strong>: 97.76% improvement over baseline</p>
+<p>✅ <strong>YES, GPfit learns non-trivial patterns</strong></p>
+<p><strong>Is GPfit competitive with other algorithms?</strong> - <strong>iris_sepal</strong>: GPfit ranks <strong>#1 out of 4</strong> algorithms - <strong>iris_petal</strong>: GPfit ranks <strong>#1 out of 4</strong> algorithms</p>
+<p>✅ <strong>GPfit achieves the best performance on both datasets</strong></p>
+<p>The complete benchmark analysis is available in the <code>benchmark.R</code> file.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="caractéristiques-techniques">Caractéristiques techniques<a class="anchor" aria-label="anchor" href="#caract%C3%A9ristiques-techniques"></a>
+<h2 id="feature-scaling-validation">Feature scaling validation<a class="anchor" aria-label="anchor" href="#feature-scaling-validation"></a>
+</h2>
+<p>Automatic feature scaling to [0,1] is correctly applied during both training and prediction. The learner stores scaling parameters (.x_min, .x_max) during training and reuses them for consistent normalization at prediction time.</p>
+<div class="section level3">
+<h3 id="validation-results-70-train--30-test-split">Validation results (70% train / 30% test split)<a class="anchor" aria-label="anchor" href="#validation-results-70-train--30-test-split"></a>
+</h3>
+<p><strong>iris_sepal:</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th>Configuration</th>
+<th>MSE Train</th>
+<th>MSE Test</th>
+<th>Improvement</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Default (exponential, power=1.95)</td>
+<td>0.0886</td>
+<td>0.0902</td>
+<td>82.2%</td>
+</tr>
+<tr class="even">
+<td>Matérn (nu=1.5)</td>
+<td>0.0940</td>
+<td>0.0860</td>
+<td>83.0%</td>
+</tr>
+<tr class="odd">
+<td>Baseline (featureless)</td>
+<td>0.7564</td>
+<td>0.5056</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p><strong>iris_petal:</strong></p>
+<table class="table">
+<thead><tr class="header">
+<th>Configuration</th>
+<th>MSE Train</th>
+<th>MSE Test</th>
+<th>Improvement</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Default (exponential, power=1.95)</td>
+<td>0.0533</td>
+<td>0.0826</td>
+<td>97.8%</td>
+</tr>
+<tr class="even">
+<td>Matérn (nu=1.5)</td>
+<td>0.0574</td>
+<td>0.0846</td>
+<td>97.8%</td>
+</tr>
+<tr class="odd">
+<td>Exponential (power=1.8)</td>
+<td>0.0504</td>
+<td>0.0819</td>
+<td>97.8%</td>
+</tr>
+<tr class="even">
+<td>Baseline (featureless)</td>
+<td>2.7962</td>
+<td>3.7950</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key observations:</strong> - MSE Train &lt; MSE Test → Proper scaling and no overfitting - MSE Test &lt;&lt; MSE Baseline → Excellent generalization - Improvement &gt; 80% on both datasets - Hyperparameters allow fine-tuning of performance</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="technical-features">Technical features<a class="anchor" aria-label="anchor" href="#technical-features"></a>
 </h2>
 <ul>
 <li>
-<strong>Normalisation automatique</strong> : Les features sont automatiquement normalisées vers [0,1] comme requis par GPfit</li>
+<strong>Automatic feature scaling</strong>: Features are automatically normalized to [0,1] as required by GPfit</li>
 <li>
-<strong>Stabilité numérique</strong> : GPfit utilise un paramètre ‘nugget’ pour la stabilité (MSE Train ≠ 0, ce qui évite l’overfitting)</li>
+<strong>Numerical stability</strong>: GPfit uses a ‘nugget’ parameter for stability (MSE Train ≠ 0, which prevents overfitting)</li>
 <li>
-<strong>Hyperparamètres tunables</strong> : Choix entre corrélation exponentielle et Matérn avec paramètres ajustables</li>
+<strong>Tunable hyperparameters</strong>: Choice between exponential and Matérn correlation with adjustable parameters</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="développement">Développement<a class="anchor" aria-label="anchor" href="#d%C3%A9veloppement"></a>
+<h2 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
 </h2>
-<p>Ce package inclut :</p>
+<p>This package includes:</p>
 <ul>
 <li>
-<strong>9 tests unitaires</strong> (100% réussis)</li>
+<strong>9 unit tests</strong> (100% passing)</li>
 <li>
-<strong>Validation complète</strong> de la qualité des prédictions</li>
+<strong>Complete validation</strong> of prediction quality</li>
 <li>
-<strong>Benchmark comparatif</strong> avec 3 autres algorithmes</li>
+<strong>Comparative benchmark</strong> with 3 other algorithms</li>
 <li>
-<strong>Intégration continue</strong> via GitHub Actions</li>
+<strong>Continuous integration</strong> via GitHub Actions</li>
 <li>
-<strong>Couverture de code</strong> suivie via Codecov</li>
+<strong>Code coverage</strong> tracked via Codecov</li>
 <li>
-<strong>Site web de documentation</strong> déployé sur Netlify</li>
+<strong>Documentation website</strong> deployed on Netlify</li>
 <li>
-<strong>Normalisation automatique</strong> des features</li>
+<strong>Automatic feature scaling</strong> with validation</li>
 <li>
-<strong>Hyperparamètres tunables</strong> (corr_type, corr_power, corr_nu)</li>
+<strong>Tunable hyperparameters</strong> (corr_type, corr_power, corr_nu)</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="travaux-connexes">Travaux connexes<a class="anchor" aria-label="anchor" href="#travaux-connexes"></a>
+<h2 id="related-work">Related work<a class="anchor" aria-label="anchor" href="#related-work"></a>
 </h2>
 <ul>
 <li>
-<strong>Wiki du cours</strong> : <a href="https://github.com/tdhock/2026-01-aa-grande-echelle/wiki/projets" class="external-link uri">https://github.com/tdhock/2026-01-aa-grande-echelle/wiki/projets</a>
+<strong>Course wiki</strong>: <a href="https://github.com/tdhock/2026-01-aa-grande-echelle/wiki/projets" class="external-link uri">https://github.com/tdhock/2026-01-aa-grande-echelle/wiki/projets</a>
 </li>
 <li>
-<strong>Package GPfit</strong> : <a href="https://CRAN.R-project.org/package=GPfit" class="external-link uri">https://CRAN.R-project.org/package=GPfit</a>
-</li>
+<strong>GPfit (CRAN)</strong>: <a href="https://CRAN.R-project.org/package=GPfit" class="external-link uri">https://CRAN.R-project.org/package=GPfit</a> - Core package for Gaussian Process regression</li>
 <li>
-<strong>Issue mlr3extralearners #487</strong> : <a href="https://github.com/mlr-org/mlr3extralearners/issues/487" class="external-link uri">https://github.com/mlr-org/mlr3extralearners/issues/487</a> (GPyTorch → GPfit)</li>
+<strong>Issue mlr3extralearners #487</strong>: <a href="https://github.com/mlr-org/mlr3extralearners/issues/487" class="external-link uri">https://github.com/mlr-org/mlr3extralearners/issues/487</a> (GPyTorch → GPfit)</li>
 <li>
-<strong>Livre mlr3</strong> : <a href="https://mlr3book.mlr-org.com/" class="external-link uri">https://mlr3book.mlr-org.com/</a>
+<strong>mlr3 book</strong>: <a href="https://mlr3book.mlr-org.com/" class="external-link uri">https://mlr3book.mlr-org.com/</a>
 </li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="auteur">Auteur<a class="anchor" aria-label="anchor" href="#auteur"></a>
+<h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a>
 </h2>
 <p><strong>Khalifa SECK</strong> - <a href="https://github.com/KhalifaSeck" class="external-link">GitHub</a></p>
 </div>
