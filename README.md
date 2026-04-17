@@ -5,7 +5,7 @@
 [![test-coverage](https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/test-coverage.yaml)
 [![codecov](https://codecov.io/github/KhalifaSeck/mlr3learners.gpfit/graph/badge.svg?token=PH1D4HEWA6)](https://codecov.io/github/KhalifaSeck/mlr3learners.gpfit)
 [![pkgdown](https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/KhalifaSeck/mlr3learners.gpfit/actions/workflows/pkgdown.yaml)
-[![Netlify Status](https://img.shields.io/netlify/site-id-here?label=docs)](https://mlr3learners-gpfit.netlify.app/)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-BADGE-ID/deploy-status)](https://mlr3learners-gpfit.netlify.app)
 <!-- badges: end -->
 
 This R package provides an interface to the [GPfit](https://CRAN.R-project.org/package=GPfit) package for the [mlr3](https://mlr3.mlr-org.com/) ecosystem. It implements Gaussian Process regression with automatic feature scaling and tunable hyperparameters.
