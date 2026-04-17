@@ -8,154 +8,150 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-BADGE-ID/deploy-status)](https://mlr3learners-gpfit.netlify.app)
 <!-- badges: end -->
 
-Learner de régression par Processus Gaussiens pour [mlr3](https://mlr3.mlr-org.com/) utilisant le package [GPfit](https://CRAN.R-project.org/package=GPfit).
+This R package provides an interface to the [GPfit](https://CRAN.R-project.org/package=GPfit) package for the [mlr3](https://mlr3.mlr-org.com/) ecosystem. It implements Gaussian Process regression with automatic feature scaling and tunable hyperparameters.
 
-**Note** : Ce package implémente **GPfit** (R pur) au lieu de **GPyTorch** (Python) comme suggéré dans l'[issue #487](https://github.com/mlr-org/mlr3extralearners/issues/487). GPfit a été choisi pour éviter les dépendances Python (reticulate) et fournir une implémentation entièrement en R, plus simple à maintenir et déployer.
+**Note**: This package implements **GPfit** (pure R) instead of **GPyTorch** (Python) as suggested in [issue #487](https://github.com/mlr-org/mlr3extralearners/issues/487). GPfit was chosen to avoid Python dependencies (reticulate) and provide a pure R implementation that is easier to maintain and deploy.
 
 ## Documentation
 
-📚 **Site web complet** : https://mlr3learners-gpfit.netlify.app/
+The site can be found at: **https://mlr3learners-gpfit.netlify.app/**
 
-Contient :
-- Documentation complète de toutes les fonctions
-- Guide d'utilisation
-- Exemples de code
+This site includes API references, usage guides and detailed performance benchmarks.
 
 ## Installation
 
-Installation depuis GitHub :
+To install it, you can use this command:
+
 ```r
 # install.packages("remotes")
 remotes::install_github("KhalifaSeck/mlr3learners.gpfit")
 ```
 
-## Utilisation
+## Usage
 
+This package provides the `regr.gpfit` learner for mlr3. Features are automatically scaled to [0,1] as required by GPfit.
+
+### Basic example
 
 ```r
 library(mlr3)
 library(mlr3learners.gpfit)
 
-# Créer une tâche de régression avec iris (sans la colonne Species)
+# Create regression task (exclude factor columns)
 iris_numeric = iris[, c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")]
 task = as_task_regr(iris_numeric, target = "Sepal.Length", id = "iris_sepal")
 
-# Créer le learner GP
+# Create and train learner
 learner = lrn("regr.gpfit")
-
-# Entraîner le modèle
 learner$train(task)
 
-# Faire des prédictions
+# Make predictions
 prediction = learner$predict(task)
-print(prediction)
-
-# Évaluer la performance
 prediction$score(msr("regr.mse"))
 ```
 
-### Hyperparamètres tunables
+### Tunable hyperparameters
 
 ```r
-# Corrélation Matérn avec smoothness personnalisé
+# Matérn correlation with custom smoothness
 learner = lrn("regr.gpfit")
 learner$param_set$values = list(corr_type = "matern", corr_nu = 1.5)
 learner$train(task)
 
-# Corrélation exponentielle avec power personnalisé
+# Exponential correlation with custom power
 learner = lrn("regr.gpfit")
 learner$param_set$values = list(corr_type = "exponential", corr_power = 1.8)
 learner$train(task)
 ```
 
-**Hyperparamètres disponibles :**
-- `corr_type`: Type de fonction de corrélation ("exponential" ou "matern")
-- `corr_power`: Paramètre de puissance pour corrélation exponentielle (défaut: 1.95)
-- `corr_nu`: Paramètre de lissage pour corrélation Matérn (défaut: 2.5)
+**Available hyperparameters:**
+- `corr_type`: Correlation function type ("exponential" or "matern")
+- `corr_power`: Power parameter for exponential correlation (default: 1.95)
+- `corr_nu`: Smoothness parameter for Matérn correlation (default: 2.5)
 
-## Validation de la qualité des prédictions
+## Benchmark results
 
-La normalisation automatique des features (vers [0,1]) est correctement appliquée en train ET en predict.
+Performance was evaluated using Mean Squared Error (MSE). Results are based on 5-fold cross-validation.
 
-### Résultats sur iris_sepal (70% train / 30% test)
-
-| Configuration | MSE Train | MSE Test | Amélioration vs Baseline |
-|---------------|-----------|----------|--------------------------|
-| Default (exponential, power=1.95) | 0.0886 | 0.0902 | **82.2%** |
-| Matern (nu=1.5) | 0.0940 | 0.0860 | **83.0%** |
-| Baseline (featureless) | 0.7564 | 0.5056 | - |
-
-### Résultats sur iris_petal (70% train / 30% test)
-
-| Configuration | MSE Train | MSE Test | Amélioration vs Baseline |
-|---------------|-----------|----------|--------------------------|
-| Default (exponential, power=1.95) | 0.0533 | 0.0826 | **97.8%** |
-| Matern (nu=1.5) | 0.0574 | 0.0846 | **97.8%** |
-| Exponential (power=1.8) | 0.0504 | 0.0819 | **97.8%** |
-| Baseline (featureless) | 2.7962 | 3.7950 | - |
-
-**Observations :**
-- MSE Train < MSE Test → Normalisation correcte (pas d'overfitting)
-- MSE Test << MSE Baseline → Excellente généralisation
-- Amélioration > 80% sur les deux datasets
-- Les hyperparamètres permettent d'ajuster finement les performances
-
-## Résultats du benchmark
-
-GPfit a été comparé à 3 autres algorithmes sur 2 jeux de données de régression (validation croisée à 5 folds) :
-
-| Jeu de données | GPfit | CV-Glmnet | KNN | Featureless |
-|----------------|-------|-----------|-----|-------------|
+| Dataset | GPfit | CV-Glmnet | KNN (Tuned) | Featureless |
+|---------|-------|-----------|-------------|-------------|
 | iris_sepal | **0.1002** | 0.1103 | 0.1311 | 0.6850 |
 | iris_petal | **0.0696** | 0.1194 | 0.1075 | 3.1047 |
 
-**GPfit obtient les meilleures performances sur les deux jeux de données !** 
+**Note**: Lower values indicate better performance. **Bold values** represent the best learner for each task.
 
-### Analyse détaillée
+### Analysis
 
-**QUESTION 1 : Est-ce que GPfit apprend quelque chose de non-trivial ?**
+**Does GPfit learn non-trivial patterns?**
+- **iris_sepal**: 85.38% improvement over baseline
+- **iris_petal**: 97.76% improvement over baseline
 
-- **iris_sepal** : Amélioration de **85.38%** par rapport au baseline
-- **iris_petal** : Amélioration de **97.76%** par rapport au baseline
+✅ **YES, GPfit learns non-trivial patterns**
 
- **OUI, GPfit apprend des patterns non-triviaux**
+**Is GPfit competitive with other algorithms?**
+- **iris_sepal**: GPfit ranks **#1 out of 4** algorithms
+- **iris_petal**: GPfit ranks **#1 out of 4** algorithms
 
-**QUESTION 2 : GPfit est-il aussi bon que les autres algorithmes ?**
+✅ **GPfit achieves the best performance on both datasets**
 
-- **iris_sepal** : GPfit se classe **#1 sur 4** algorithmes
-- **iris_petal** : GPfit se classe **#1 sur 4** algorithmes
+The complete benchmark analysis is available in the `benchmark.R` file.
 
-**GPfit est le MEILLEUR sur les deux datasets !**
+## Feature scaling validation
 
-L'analyse complète du benchmark est disponible dans le fichier `benchmark.R` du package.
+Automatic feature scaling to [0,1] is correctly applied during both training and prediction. The learner stores scaling parameters (.x_min, .x_max) during training and reuses them for consistent normalization at prediction time.
 
-## Caractéristiques techniques
+### Validation results (70% train / 30% test split)
 
-- **Normalisation automatique** : Les features sont automatiquement normalisées vers [0,1] comme requis par GPfit
-- **Stabilité numérique** : GPfit utilise un paramètre 'nugget' pour la stabilité (MSE Train ≠ 0, ce qui évite l'overfitting)
-- **Hyperparamètres tunables** : Choix entre corrélation exponentielle et Matérn avec paramètres ajustables
+**iris_sepal:**
 
-## Développement
+| Configuration | MSE Train | MSE Test | Improvement |
+|---------------|-----------|----------|-------------|
+| Default (exponential, power=1.95) | 0.0886 | 0.0902 | 82.2% |
+| Matérn (nu=1.5) | 0.0940 | 0.0860 | 83.0% |
+| Baseline (featureless) | 0.7564 | 0.5056 | - |
 
-Ce package inclut :
+**iris_petal:**
 
-- **9 tests unitaires** (100% réussis)
-- **Validation complète** de la qualité des prédictions
-- **Benchmark comparatif** avec 3 autres algorithmes
-- **Intégration continue** via GitHub Actions
-- **Couverture de code** suivie via Codecov
-- **Site web de documentation** déployé sur Netlify
-- **Normalisation automatique** des features
-- **Hyperparamètres tunables** (corr_type, corr_power, corr_nu)
+| Configuration | MSE Train | MSE Test | Improvement |
+|---------------|-----------|----------|-------------|
+| Default (exponential, power=1.95) | 0.0533 | 0.0826 | 97.8% |
+| Matérn (nu=1.5) | 0.0574 | 0.0846 | 97.8% |
+| Exponential (power=1.8) | 0.0504 | 0.0819 | 97.8% |
+| Baseline (featureless) | 2.7962 | 3.7950 | - |
 
-## Travaux connexes
+**Key observations:**
+- MSE Train < MSE Test → Proper scaling and no overfitting
+- MSE Test << MSE Baseline → Excellent generalization
+- Improvement > 80% on both datasets
+- Hyperparameters allow fine-tuning of performance
 
-- **Wiki du cours** : https://github.com/tdhock/2026-01-aa-grande-echelle/wiki/projets
-- **Package GPfit** : https://CRAN.R-project.org/package=GPfit
-- **Issue mlr3extralearners #487** : https://github.com/mlr-org/mlr3extralearners/issues/487 (GPyTorch → GPfit)
-- **Livre mlr3** : https://mlr3book.mlr-org.com/
+## Technical features
 
-## Auteur
+- **Automatic feature scaling**: Features are automatically normalized to [0,1] as required by GPfit
+- **Numerical stability**: GPfit uses a 'nugget' parameter for stability (MSE Train ≠ 0, which prevents overfitting)
+- **Tunable hyperparameters**: Choice between exponential and Matérn correlation with adjustable parameters
+
+## Development
+
+This package includes:
+
+- **9 unit tests** (100% passing)
+- **Complete validation** of prediction quality
+- **Comparative benchmark** with 3 other algorithms
+- **Continuous integration** via GitHub Actions
+- **Code coverage** tracked via Codecov
+- **Documentation website** deployed on Netlify
+- **Automatic feature scaling** with validation
+- **Tunable hyperparameters** (corr_type, corr_power, corr_nu)
+
+## Related work
+
+- **Course wiki**: https://github.com/tdhock/2026-01-aa-grande-echelle/wiki/projets
+- **GPfit (CRAN)**: https://CRAN.R-project.org/package=GPfit - Core package for Gaussian Process regression
+- **Issue mlr3extralearners #487**: https://github.com/mlr-org/mlr3extralearners/issues/487 (GPyTorch → GPfit)
+- **mlr3 book**: https://mlr3book.mlr-org.com/
+
+## Author
 
 **Khalifa SECK** - [GitHub](https://github.com/KhalifaSeck)
 
